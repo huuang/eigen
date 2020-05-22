@@ -112,7 +112,7 @@ static void *ARNavigationControllerMenuAwareScrollViewContext = &ARNavigationCon
 
     _backButton = [[ARBackButton alloc] init];
     [_backButton ar_extendHitTestSizeByWidth:10 andHeight:10];
-    
+
     [_backButton setImage:[UIImage imageNamed:@"BackChevron"] forState:UIControlStateNormal];
     [_backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     _backButton.adjustsImageWhenDisabled = NO;
@@ -193,13 +193,13 @@ static void *ARNavigationControllerMenuAwareScrollViewContext = &ARNavigationCon
     // ourselves. Otherwise, we'll leave it to the interactive transition.
     if (self.interactiveTransitionHandler == nil) {
         [self showBackButton:[self shouldShowBackButtonForViewController:viewController] animated:animated];
-        [self showStatusBarBackground:[self shouldShowStatusBarBackgroundForViewController:viewController] animated:animated white:useWhite];
+//        [self showStatusBarBackground:[self shouldShowStatusBarBackgroundForViewController:viewController] animated:YES white:useWhite];
         [self updateBackButtonPositionForViewController:viewController animated:animated];
         [self setNeedsStatusBarAppearanceUpdate];
 
         ar_dispatch_after(0.05, ^{
             BOOL hideToolbar = [self shouldHideToolbarMenuForViewController:viewController];
-            [[ARTopMenuViewController sharedController] hideToolbar:hideToolbar animated:animated];
+//            [[ARTopMenuViewController sharedController] hideToolbar:hideToolbar animated:animated];
         });
     }
 }
@@ -236,20 +236,8 @@ static void *ARNavigationControllerMenuAwareScrollViewContext = &ARNavigationCon
 
 - (void)updateBackButtonPositionForViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    CGFloat topMargin = 12;
-
-    BOOL currentlyShowingStatusBar = [ARTopMenuViewController sharedController].isShowingStatusBar;
-    if (currentlyShowingStatusBar) {
-        topMargin = 12;
-    } else {
-        topMargin = self.view.safeAreaInsets.top + 12;
-    }
-
-    BOOL fullBleed = [viewController.class conformsToProtocol:@protocol(ARComponentFullBleedViewSizing)] && [(UIViewController <ARComponentFullBleedViewSizing> *)viewController fullBleed];
-    if (fullBleed) {
-        CGFloat topInsetMargin = [[ARTopMenuViewController sharedController].view safeAreaInsets].top;
-        topMargin = topInsetMargin + 12;
-    }
+    CGFloat topInsetMargin = [[ARTopMenuViewController sharedController].view safeAreaInsets].top;
+    CGFloat topMargin = topInsetMargin + 12;
 
     [UIView animateIf:animated duration:ARAnimationDuration :^{
         self.backButtonTopConstraint.constant = topMargin;
@@ -379,7 +367,7 @@ ShouldHideItem(UIViewController *viewController, SEL itemSelector, ...)
 
 - (BOOL)shouldShowStatusBarBackgroundForViewController:(UIViewController *)viewController
 {
-    return !ShouldHideItem(viewController, @selector(hidesStatusBarBackground), NULL);
+    return NO;
 }
 
 - (BOOL)shouldHideToolbarMenuForViewController:(UIViewController *)viewController

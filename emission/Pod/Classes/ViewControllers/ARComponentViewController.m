@@ -26,7 +26,7 @@
 
     if (self.shouldInjectSafeAreaInsets) {
         // set default value for pre-iphone-X values
-        [properties setValue:@{ @"top": @(self.fullBleed ? 20 : 0),
+        [properties setValue:@{ @"top": @(20),
                                 @"bottom": @(0),
                                 @"left": @(0),
                                 @"right": @(0) }
@@ -57,8 +57,8 @@
   // OS, but in the cases where we have full bleed headers whiich should go behind
   // the status bar, then the top layout constrain will need to work with the main
   // view instead of the traditional topLayoutGuide
-  id topConstrainedItem = self.fullBleed ? (id)self.view : self.topLayoutGuide;
-  NSLayoutAttribute topConstrainedAttribute = self.fullBleed ? NSLayoutAttributeTop : NSLayoutAttributeBottom;
+  id topConstrainedItem = (id)self.view;
+  NSLayoutAttribute topConstrainedAttribute = NSLayoutAttributeTop;
 
   [self.view addConstraints:@[
     [NSLayoutConstraint constraintWithItem:self.rootView
